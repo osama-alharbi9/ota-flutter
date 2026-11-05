@@ -13,7 +13,7 @@ import '../../dart/package_map.dart';
 import '../../devfs.dart';
 import '../../flutter_manifest.dart';
 import '../../isolated/native_assets/dart_hook_result.dart';
-import '../../shorebird/shorebird_yaml.dart';
+import '../../revon/revon_yaml.dart';
 import '../build_system.dart';
 import '../depfile.dart';
 import '../exceptions.dart';
@@ -163,15 +163,17 @@ Future<Depfile> copyAssets(
           }
           if (doCopy) {
             await (content.file as File).copy(file.path);
-            if (file.basename == 'shorebird.yaml') {
+            if (file.basename == 'ota.yaml') {
               try {
-                updateShorebirdYaml(
+                updateRevonYaml(
                   environment.defines[kFlavor],
                   file.path,
                   environment: environment.platform.environment,
                 );
+                // The engine reads the compiled config under this name.
+                file.copySync(file.parent.childFile('revon.yaml').path);
               } on Exception catch (error) {
-                throw Exception('Failed to generate shorebird configuration. Error: $error');
+                throw Exception('Failed to generate revon configuration. Error: $error');
               }
             }
           }

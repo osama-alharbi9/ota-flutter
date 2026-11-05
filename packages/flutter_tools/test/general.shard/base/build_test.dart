@@ -37,7 +37,7 @@ const kDefaultClang = <String>[
   'build/foo/snapshot_assembly.o',
 ];
 
-// Shorebird link info arguments added for iOS/macOS builds.
+// Revon link info arguments added for iOS/macOS builds.
 // These correspond to the dumpLinkInfoArgs in AOTSnapshotter.build().
 const kLinkInfoArgs = <String>[
   '--print_class_table_link_debug_info_to=build/App.class_table.json',

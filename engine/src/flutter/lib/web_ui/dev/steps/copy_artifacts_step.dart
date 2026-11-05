@@ -56,7 +56,7 @@ class CopyArtifactsStep implements PipelineStep {
       ),
     };
     final Uri url = Uri.https(
-      'download.shorebird.dev',
+      'storage.googleapis.com',
       '${realmComponent}flutter_infra_release/flutter/${realm == LuciRealm.Try ? gitRevision : contentHash}/flutter-web-sdk.zip',
     );
     final http.Response response = await http.Client().get(url);

@@ -33,7 +33,7 @@ class BuildAppBundleCommand extends BuildSubCommand {
     usesDartDefineOption();
     usesExtraDartFlagOptions(verboseHelp: verboseHelp);
     addBuildPerformanceFile(hide: !verboseHelp);
-    usesShorebirdTraceOption(hide: !verboseHelp);
+    usesRevonTraceOption(hide: !verboseHelp);
     usesTrackWidgetCreation(verboseHelp: verboseHelp);
     addEnableExperimentation(hide: !verboseHelp);
     usesAnalyzeSizeFlag();

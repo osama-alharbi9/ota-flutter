@@ -25,7 +25,7 @@
 #include "flutter/shell/platform/linux/fl_platform_handler.h"
 #include "flutter/shell/platform/linux/fl_plugin_registrar_private.h"
 #include "flutter/shell/platform/linux/fl_settings_handler.h"
-#include "flutter/shell/platform/linux/fl_shorebird.h"
+#include "flutter/shell/platform/linux/fl_revon.h"
 #include "flutter/shell/platform/linux/fl_texture_gl_private.h"
 #include "flutter/shell/platform/linux/fl_texture_registrar_private.h"
 #include "flutter/shell/platform/linux/public/flutter_linux/fl_plugin_registry.h"
@@ -828,14 +828,14 @@ gboolean fl_engine_start(FlEngine* self, GError** error) {
     FlutterEngineAOTDataSource source = {};
     source.type = kFlutterEngineAOTDataSourceTypeElfPath;
     std::string patch_path;
-    auto setup_shorebird_result =
-        flutter::SetUpShorebird(args.assets_path, patch_path);
-    if (setup_shorebird_result) {
+    auto setup_revon_result =
+        flutter::SetUpRevon(args.assets_path, patch_path);
+    if (setup_revon_result) {
       // If we have a patch installed, we replace the default AOT library path
       // with the patch path here.
       source.elf_path = patch_path.c_str();
     } else {
-      FML_LOG(ERROR) << "Failed to configure Shorebird.";
+      FML_LOG(ERROR) << "Failed to configure Revon.";
       source.elf_path = fl_dart_project_get_aot_library_path(self->project);
     }
 

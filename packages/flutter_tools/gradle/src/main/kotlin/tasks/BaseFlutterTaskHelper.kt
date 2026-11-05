@@ -110,8 +110,8 @@ object BaseFlutterTaskHelper {
             baseFlutterTask.performanceMeasurementFile?.let {
                 args("--performance-measurement-file=$it")
             }
-            baseFlutterTask.shorebirdTraceFile?.let {
-                args("--shorebird-trace-file=$it")
+            baseFlutterTask.revonTraceFile?.let {
+                args("--revon-trace-file=$it")
             }
             args("-dTargetFile=${baseFlutterTask.targetPath}")
             args("-dTargetPlatform=android")

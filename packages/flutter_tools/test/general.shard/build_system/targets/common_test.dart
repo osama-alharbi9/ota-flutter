@@ -25,7 +25,7 @@ const kBoundaryKey = '4d2d9609-c662-4571-afde-31410f96caa6';
 const kElfAot = '--snapshot_kind=app-aot-elf';
 const kAssemblyAot = '--snapshot_kind=app-aot-assembly';
 
-/// Generate Shorebird link info arguments for iOS/macOS AOT builds.
+/// Generate Revon link info arguments for iOS/macOS AOT builds.
 /// The [buildPath] should be the build directory path (outputDir.parent.path).
 List<String> linkInfoArgsFor(String buildPath) => <String>[
   '--print_class_table_link_debug_info_to=$buildPath/App.class_table.json',

@@ -29,7 +29,7 @@ import '../convert.dart';
 import '../flutter_manifest.dart';
 import '../globals.dart' as globals;
 import '../project.dart';
-import '../shorebird/android_build_trace_session.dart';
+import '../revon/android_build_trace_session.dart';
 import 'android_builder.dart';
 import 'android_studio.dart';
 import 'gradle_errors.dart';

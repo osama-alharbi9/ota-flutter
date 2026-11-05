@@ -7,7 +7,7 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 
 import '../convert.dart';
-import '../shorebird/network_trace_span.dart';
+import '../revon/network_trace_span.dart';
 import 'common.dart';
 import 'file_system.dart';
 import 'io.dart';

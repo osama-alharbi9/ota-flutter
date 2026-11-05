@@ -20,7 +20,7 @@ import '../../../src/fake_process_manager.dart';
 import '../../../src/fakes.dart';
 import '../../../src/package_config.dart';
 
-/// Generate Shorebird link info arguments for iOS/macOS AOT builds.
+/// Generate Revon link info arguments for iOS/macOS AOT builds.
 /// The [buildPath] should be the build directory path (outputDir.parent.path).
 List<String> linkInfoArgsFor(String buildPath) => <String>[
   '--print_class_table_link_debug_info_to=$buildPath/App.class_table.json',
@@ -765,7 +765,7 @@ void main() {
   );
 
   testUsingContext(
-    'ReleaseMacOSBundleFlutterAssets updates shorebird.yaml if present',
+    'ReleaseMacOSBundleFlutterAssets updates revon.yaml if present',
     () async {
       environment.defines[kBuildMode] = 'release';
       environment.defines[kXcodeAction] = 'install';
@@ -787,18 +787,18 @@ void main() {
       // Set up native_assets.json (required by MacOSBundleFlutterAssets)
       environment.buildDir.childFile('native_assets.json').createSync();
 
-      // Set up pubspec.yaml with shorebird.yaml as an asset
+      // Set up pubspec.yaml with revon.yaml as an asset
       fileSystem.file('pubspec.yaml')
         ..createSync()
         ..writeAsStringSync('''
 name: example
 flutter:
   assets:
-    - shorebird.yaml
+    - revon.yaml
 ''');
 
-      // Create the shorebird.yaml asset file
-      fileSystem.file('shorebird.yaml')
+      // Create the revon.yaml asset file
+      fileSystem.file('revon.yaml')
         ..createSync()
         ..writeAsStringSync('''
 # Some other text that should be removed
@@ -814,16 +814,16 @@ flavors:
       await const ReleaseMacOSBundleFlutterAssets().build(environment);
 
       // The output is in environment.outputDir, not buildDir
-      final String shorebirdYamlPath = fileSystem.path.join(
+      final String revonYamlPath = fileSystem.path.join(
         environment.outputDir.path,
         'App.framework',
         'Versions',
         'A',
         'Resources',
         'flutter_assets',
-        'shorebird.yaml',
+        'revon.yaml',
       );
-      expect(fileSystem.file(shorebirdYamlPath).readAsStringSync(), 'app_id: internal-app-id');
+      expect(fileSystem.file(revonYamlPath).readAsStringSync(), 'app_id: internal-app-id');
     },
     overrides: <Type, Generator>{
       FileSystem: () => fileSystem,

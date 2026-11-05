@@ -63,7 +63,7 @@ We plan to have four stable releases and 12 beta releases during 2025, similar t
 We'll also make investments to improve our ability to expedite the release of any needed hotfix/patch  releases.
 
 ## Non-goals
-We're still not planning on investing in built-in support for code push or hot updates. For code push, our friends at shorebird.dev may have offerings of interest. For UI push (also known as server-driven UI), we recommend the rfw package.
+We're still not planning on investing in built-in support for code push or hot updates. For UI push (also known as server-driven UI), we recommend the rfw package.
 
 We're also not planning on adding any additional supported platforms.
 

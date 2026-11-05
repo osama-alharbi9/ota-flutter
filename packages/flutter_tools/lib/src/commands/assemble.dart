@@ -4,7 +4,7 @@
 
 import 'package:args/args.dart';
 import 'package:meta/meta.dart';
-import 'package:shorebird_build_trace/shorebird_build_trace.dart';
+import 'package:revon_build_trace/revon_build_trace.dart';
 import 'package:unified_analytics/unified_analytics.dart';
 
 import '../artifacts.dart';
@@ -114,10 +114,10 @@ class AssembleCommand extends FlutterCommand {
       help: 'Output individual target performance to a JSON file.',
     );
     argParser.addOption(
-      'shorebird-trace-file',
+      'revon-trace-file',
       help:
-          'Output a Shorebird build trace in Chrome Trace Event Format '
-          'JSON. Shorebird-specific; used by the build-trace plumbing in '
+          'Output a Revon build trace in Chrome Trace Event Format '
+          'JSON. Revon-specific; used by the build-trace plumbing in '
           'gradle.dart / mac.dart to collect flutter-assemble timings.',
     );
     argParser.addMultiOption(
@@ -402,8 +402,8 @@ class AssembleCommand extends FlutterCommand {
       final File outFile = globals.fs.file(argumentResults['performance-measurement-file']);
       writePerformanceData(result.performance.values, outFile);
     }
-    if (argumentResults.wasParsed('shorebird-trace-file')) {
-      final File outFile = globals.fs.file(argumentResults['shorebird-trace-file']);
+    if (argumentResults.wasParsed('revon-trace-file')) {
+      final File outFile = globals.fs.file(argumentResults['revon-trace-file']);
       writeTraceData(result.performance.values, outFile);
     }
     if (argumentResults.wasParsed('depfile')) {

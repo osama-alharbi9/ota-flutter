@@ -67,7 +67,7 @@ void main() {
     required int commitsBetweenRefs,
   }) {
     return [
-      // Shorebird release branch check (returns empty to fall through to
+      // Revon release branch check (returns empty to fall through to
       // regular version lookup).
       FakeCommand(
         command: [
@@ -1538,7 +1538,7 @@ void main() {
     expect(processManager, hasNoRemainingExpectations);
   }, overrides: {Git: () => git});
 
-  testUsingContext('determine resolves version from shorebird flutter_release branch', () {
+  testUsingContext('determine resolves version from revon flutter_release branch', () {
     processManager.addCommands(<FakeCommand>[
       const FakeCommand(
         command: <String>['git', 'tag', '--points-at', 'HEAD'],
@@ -1568,14 +1568,14 @@ void main() {
     expect(processManager, hasNoRemainingExpectations);
   });
 
-  testUsingContext('determine skips non-stable shorebird flutter_release branches', () {
+  testUsingContext('determine skips non-stable revon flutter_release branches', () {
     const headRevision = 'abcd1234';
     processManager.addCommands(<FakeCommand>[
       const FakeCommand(
         command: <String>['git', 'tag', '--points-at', 'HEAD'],
         // No tag at HEAD.
       ),
-      // Shorebird release branch check returns only a non-stable branch.
+      // Revon release branch check returns only a non-stable branch.
       const FakeCommand(
         command: <String>[
           'git',
@@ -1622,7 +1622,7 @@ void main() {
   });
 
   testUsingContext(
-    'determine picks stable branch over rc branch from shorebird flutter_release',
+    'determine picks stable branch over rc branch from revon flutter_release',
     () {
       processManager.addCommands(<FakeCommand>[
         const FakeCommand(

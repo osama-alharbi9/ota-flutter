@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'package:file/file.dart';
 import 'package:process/process.dart';
-import 'package:shorebird_build_trace/shorebird_build_trace.dart';
+import 'package:revon_build_trace/revon_build_trace.dart';
 import 'package:unified_analytics/unified_analytics.dart';
 
 import '../base/common.dart';
@@ -340,7 +340,7 @@ class CocoaPods {
   Future<void> _runPodInstall(XcodeBasedProject xcodeProject, BuildMode buildMode) async {
     final Status status = _logger.startProgress('Running pod install...');
 
-    // Shorebird-specific: when a build trace is active, stream pod install
+    // Revon-specific: when a build trace is active, stream pod install
     // output so we can timestamp phase transitions. On plugin-heavy apps
     // pod install can be minutes, and a single opaque span hides where the
     // time goes (dependency analysis vs downloads vs project generation vs

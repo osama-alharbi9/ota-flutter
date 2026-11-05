@@ -35,10 +35,14 @@ group("generate_snapshot_bins") {
   if (host_os == "mac" &&
       (target_os == "mac" || target_os == "ios" || target_os == "android")) {
     # For macOS target builds: needed for both target CPUs (arm64, x64).
-    public_deps += [
-      ":create_macos_analyze_snapshots",
-      ":create_macos_gen_snapshots",
-    ]
+    public_deps += [ ":create_macos_gen_snapshots" ]
+
+    # Stock Dart defines analyze_snapshot only for 64-bit AOT targets
+    # (runtime/runtime_args.gni: build_analyze_snapshot). It is used for the
+    # iOS and macOS patch tooling, never for Android.
+    if (target_cpu == "arm64" || target_cpu == "x64") {
+      public_deps += [ ":create_macos_analyze_snapshots" ]
+    }
   } else if (host_os == "mac" &&
              (target_cpu == "arm" || target_cpu == "arm64")) {
     # For iOS, Android target builds: all AOT target CPUs are arm/arm64.
@@ -50,7 +54,7 @@ group("generate_snapshot_bins") {
   }
 
   # Build analyze_snapshot for 64-bit target CPUs on linux.
-  # Or always targeting arm64 for Shorebird builds.
+  # Or always targeting arm64 for Revon builds.
   if ((host_os == "linux" &&
        (target_cpu == "x64" || target_cpu == "riscv64")) ||
       target_cpu == "arm64") {
@@ -263,7 +267,7 @@ if (host_os == "mac" &&
     ]
   }
 
-  # Added by shorebird.
+  # Added in this fork (not in stock Flutter).
   # analyze_snapshot targets below were copied from the gen_snapshot targets
   # above to allow us to include analyze_snapshot in the artifacts generated
   # for create_ios_framework.py.
@@ -297,33 +301,36 @@ if (host_os == "mac" &&
     }
   }
 
-  build_mac_analyze_snapshot(
-      "create_macos_analyze_snapshot_arm64_${target_cpu}") {
-    host_arch = "arm64"
-  }
+  # Only 64-bit targets have analyze_snapshot in stock Dart (see above).
+  if (target_cpu == "arm64" || target_cpu == "x64") {
+    build_mac_analyze_snapshot(
+        "create_macos_analyze_snapshot_arm64_${target_cpu}") {
+      host_arch = "arm64"
+    }
 
-  build_mac_analyze_snapshot(
-      "create_macos_analyze_snapshot_x64_${target_cpu}") {
-    host_arch = "x64"
-  }
+    build_mac_analyze_snapshot(
+        "create_macos_analyze_snapshot_x64_${target_cpu}") {
+      host_arch = "x64"
+    }
 
-  action("create_macos_analyze_snapshots") {
-    script = "//flutter/sky/tools/create_macos_binary.py"
-    outputs = [ "${root_out_dir}/analyze_snapshot_${target_cpu}" ]
-    args = [
-      "--in-arm64",
-      rebase_path(
-          "${root_out_dir}/artifacts_arm64/analyze_snapshot_${target_cpu}"),
-      "--in-x64",
-      rebase_path(
-          "${root_out_dir}/artifacts_x64/analyze_snapshot_${target_cpu}"),
-      "--out",
-      rebase_path("${root_out_dir}/analyze_snapshot_${target_cpu}"),
-    ]
-    deps = [
-      ":create_macos_analyze_snapshot_arm64_${target_cpu}",
-      ":create_macos_analyze_snapshot_x64_${target_cpu}",
-    ]
+    action("create_macos_analyze_snapshots") {
+      script = "//flutter/sky/tools/create_macos_binary.py"
+      outputs = [ "${root_out_dir}/analyze_snapshot_${target_cpu}" ]
+      args = [
+        "--in-arm64",
+        rebase_path(
+            "${root_out_dir}/artifacts_arm64/analyze_snapshot_${target_cpu}"),
+        "--in-x64",
+        rebase_path(
+            "${root_out_dir}/artifacts_x64/analyze_snapshot_${target_cpu}"),
+        "--out",
+        rebase_path("${root_out_dir}/analyze_snapshot_${target_cpu}"),
+      ]
+      deps = [
+        ":create_macos_analyze_snapshot_arm64_${target_cpu}",
+        ":create_macos_analyze_snapshot_x64_${target_cpu}",
+      ]
+    }
   }
 }
 

@@ -73,12 +73,12 @@ final macosPlatformCustomEnv = FakePlatform(
   environment: <String, String>{'FLUTTER_ROOT': '/', 'HOME': '/'},
 );
 
-final Platform macosPlatformWithShorebirdPublicKey = FakePlatform(
+final Platform macosPlatformWithRevonPublicKey = FakePlatform(
   operatingSystem: 'macos',
   environment: <String, String>{
     'FLUTTER_ROOT': '/',
     'HOME': '/',
-    'SHOREBIRD_PUBLIC_KEY': 'my_public_key',
+    'REVON_PUBLIC_KEY': 'my_public_key',
   },
 );
 final Platform notMacosPlatform = FakePlatform(environment: <String, String>{'FLUTTER_ROOT': '/'});
@@ -1143,16 +1143,16 @@ STDERR STUFF
         osUtils: FakeOperatingSystemUtils(),
       );
       createMinimalMockProjectFiles();
-      final File shorebirdYamlFile =
+      final File revonYamlFile =
           fileSystem.file(
-              'build/macos/Build/Products/Release/example.app/Contents/Frameworks/App.framework/Resources/flutter_assets/shorebird.yaml',
+              'build/macos/Build/Products/Release/example.app/Contents/Frameworks/App.framework/Resources/flutter_assets/revon.yaml',
             )
             ..createSync(recursive: true)
             ..writeAsStringSync('app_id: my-app-id');
 
       await createTestCommandRunner(command).run(const <String>['build', 'macos', '--no-pub']);
 
-      final String updatedYaml = shorebirdYamlFile.readAsStringSync();
+      final String updatedYaml = revonYamlFile.readAsStringSync();
       expect(updatedYaml, contains('app_id: my-app-id'));
       expect(updatedYaml, contains('patch_public_key: my_public_key'));
     },
@@ -1160,13 +1160,13 @@ STDERR STUFF
       FileSystem: () => fileSystem,
       ProcessManager: () =>
           FakeProcessManager.list(<FakeCommand>[setUpFakeXcodeBuildHandler('Release')]),
-      Platform: () => macosPlatformWithShorebirdPublicKey,
+      Platform: () => macosPlatformWithRevonPublicKey,
       FeatureFlags: () => TestFeatureFlags(isMacOSEnabled: true),
       OperatingSystemUtils: () => FakeOperatingSystemUtils(hostPlatform: HostPlatform.darwin_x64),
     },
-    // SHOREBIRD_PUBLIC_KEY → shorebird.yaml injection happens inside the
+    // REVON_PUBLIC_KEY → revon.yaml injection happens inside the
     // assets build target, which TestBuildSystem.all stubs out entirely.
-    // Exercising it needs a real build system or a direct updateShorebirdYaml
+    // Exercising it needs a real build system or a direct updateRevonYaml
     // call; skip until that rework lands.
     skip: true,
   );

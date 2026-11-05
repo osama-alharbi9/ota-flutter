@@ -130,7 +130,7 @@ class BuildableIOSApp extends IOSApp {
   @override
   String? get name => _appProductName;
 
-  String get shorebirdYamlPath => globals.fs.path.join(
+  String get revonYamlPath => globals.fs.path.join(
     archiveBundleOutputPath,
     'Products',
     'Applications',
@@ -138,7 +138,7 @@ class BuildableIOSApp extends IOSApp {
     'Frameworks',
     'App.framework',
     'flutter_assets',
-    'shorebird.yaml',
+    'revon.yaml',
   );
 
   @override

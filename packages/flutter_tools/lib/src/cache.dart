@@ -34,7 +34,7 @@ import 'base/user_messages.dart';
 import 'convert.dart';
 import 'features.dart';
 
-const kShorebirdStorageUrl = 'https://download.shorebird.dev';
+const kRevonStorageUrl = 'https://storage.googleapis.com';
 const kFlutterRootEnvironmentVariableName =
     'FLUTTER_ROOT'; // should point to //flutter/ (root of flutter/flutter repo)
 const kFlutterEngineEnvironmentVariableName =
@@ -518,7 +518,7 @@ class Cache {
   /// The base for URLs that store Flutter engine artifacts that are fetched
   /// during the installation of the Flutter SDK.
   ///
-  /// By default the base URL is https://download.shorebird.dev. However, if
+  /// By default the base URL is https://storage.googleapis.com. However, if
   /// `FLUTTER_STORAGE_BASE_URL` environment variable ([kFlutterStorageBaseUrl])
   /// is provided, the environment variable value is returned instead.
   ///
@@ -530,11 +530,11 @@ class Cache {
     String? overrideUrl = _platform.environment[kFlutterStorageBaseUrl];
     if (overrideUrl == null) {
       return storageRealm.isEmpty
-          ? 'https://download.shorebird.dev'
+          ? 'https://storage.googleapis.com'
           : 'https://storage.googleapis.com/$storageRealm';
     }
-    // Shorebird's artifact proxy is a trusted source.
-    if (overrideUrl == kShorebirdStorageUrl) {
+    // Revon's artifact proxy is a trusted source.
+    if (overrideUrl == kRevonStorageUrl) {
       return overrideUrl;
     }
     // verify that this is a valid URI.

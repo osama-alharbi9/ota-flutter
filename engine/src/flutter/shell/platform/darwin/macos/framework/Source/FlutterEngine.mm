@@ -12,7 +12,7 @@
 
 #include "flutter/common/constants.h"
 #include "flutter/fml/paths.h"
-#include "flutter/shell/common/shorebird/shorebird.h"
+#include "flutter/shell/common/revon/revon.h"
 #include "flutter/shell/platform/common/app_lifecycle_state.h"
 #include "flutter/shell/platform/common/engine_switches.h"
 #include "flutter/shell/platform/embedder/embedder.h"
@@ -658,37 +658,37 @@ static void SetThreadPriority(FlutterThreadPriority priority) {
   }
 }
 
-- (BOOL)configureShorebird:(NSString**)patchPath {
-  NSLog(@"[shorebird] setting up non-linker shorebird");
+- (BOOL)configureRevon:(NSString**)patchPath {
+  NSLog(@"[revon] setting up non-linker revon");
   NSString* bundlePath =
       [[NSBundle bundleWithURL:[NSBundle.mainBundle.privateFrameworksURL
                                    URLByAppendingPathComponent:@"App.framework"]] bundlePath];
   bundlePath = [bundlePath stringByAppendingString:@"/App"];
   NSString* assetsPath = _project.assetsPath;
-  NSURL* shorebirdYamlPath = [NSURL URLWithString:@"shorebird.yaml"
+  NSURL* revonYamlPath = [NSURL URLWithString:@"revon.yaml"
                                     relativeToURL:[NSURL fileURLWithPath:assetsPath]];
-  NSString* shorebirdYamlContents = [NSString stringWithContentsOfURL:shorebirdYamlPath
+  NSString* revonYamlContents = [NSString stringWithContentsOfURL:revonYamlPath
                                                              encoding:NSUTF8StringEncoding
                                                                 error:nil];
   NSString* appVersion =
       [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
   NSString* appBuildNumber = [NSBundle.mainBundle objectForInfoDictionaryKey:@"CFBundleVersion"];
   std::string cache_path =
-      fml::paths::JoinPaths({getenv("HOME"), "Library", "Application Support", "shorebird"});
+      fml::paths::JoinPaths({getenv("HOME"), "Library", "Application Support", "revon"});
   flutter::ReleaseVersion release_version = {appVersion.UTF8String, appBuildNumber.UTF8String};
-  flutter::ShorebirdConfigArgs shorebird_args(cache_path, cache_path, bundlePath.UTF8String,
-                                              shorebirdYamlContents.UTF8String, release_version);
-  NSLog(@"[shorebird] calling ConfigureShorebird");
+  flutter::RevonConfigArgs revon_args(cache_path, cache_path, bundlePath.UTF8String,
+                                              revonYamlContents.UTF8String, release_version);
+  NSLog(@"[revon] calling ConfigureRevon");
   std::string patch_path;
-  auto res = flutter::ConfigureShorebird(shorebird_args, patch_path);
+  auto res = flutter::ConfigureRevon(revon_args, patch_path);
   if (!res) {
-    NSLog(@"[shorebird] ConfigureShorebird failed");
+    NSLog(@"[revon] ConfigureRevon failed");
     return NO;
   }
 
-  NSLog(@"[shorebird] ConfigureShorebird success!");
+  NSLog(@"[revon] ConfigureRevon success!");
   *patchPath = [NSString stringWithUTF8String:patch_path.c_str()];
-  NSLog(@"[shorebird] patchPath: %@", *patchPath);
+  NSLog(@"[revon] patchPath: %@", *patchPath);
   return YES;
 }
 
@@ -790,9 +790,9 @@ static void SetThreadPriority(FlutterThreadPriority priority) {
   flutterArguments.custom_task_runners = &custom_task_runners;
 
   NSString* elfPath;
-  BOOL configureShorebirdRes = [self configureShorebird:&elfPath];
-  if (!configureShorebirdRes) {
-    // No patch exists, or we failed to configure shorebird. This is a fallback.
+  BOOL configureRevonRes = [self configureRevon:&elfPath];
+  if (!configureRevonRes) {
+    // No patch exists, or we failed to configure revon. This is a fallback.
     // Upstream, this code lives in -(void)loadAOTData:.
     //
     // This is the location where the test fixture places the snapshot file.

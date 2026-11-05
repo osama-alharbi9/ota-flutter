@@ -31,7 +31,7 @@ class BuildApkCommand extends BuildSubCommand {
     usesExtraDartFlagOptions(verboseHelp: verboseHelp);
     addEnableExperimentation(hide: !verboseHelp);
     addBuildPerformanceFile(hide: !verboseHelp);
-    usesShorebirdTraceOption(hide: !verboseHelp);
+    usesRevonTraceOption(hide: !verboseHelp);
     usesAnalyzeSizeFlag();
     addAndroidSpecificBuildOptions(hide: !verboseHelp);
     addIgnoreDeprecationOption();

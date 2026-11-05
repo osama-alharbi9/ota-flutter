@@ -1,0 +1,86 @@
+# Copyright 2024 The Shorebird Authors. All rights reserved.
+# Use of this source code is governed by a MIT-style license that can be
+# found in the LICENSE file.
+
+# Computes variables needed to build and link the Rust updater library.
+#
+# Exported variables:
+#   revon_updater_supported - Whether the current platform is supported.
+#   revon_updater_output_lib - Path to the built static library.
+#   revon_updater_rust_target - Rust target triple for the current platform.
+#   revon_updater_rs_sources - List of .rs source files (for GN inputs).
+
+if (is_android) {
+  import("//build/config/android/config.gni")
+}
+
+revon_updater_dir = "//flutter/third_party/updater"
+
+# Compute the Rust target triple from the GN target_os/target_cpu. GN
+# evaluates BUILD files under every toolchain in use, not just the
+# top-level one, so we get called for host/sub toolchains too. Any
+# (os, cpu) combo we don't explicitly handle leaves the rust target
+# empty and marks the updater unsupported for that toolchain, which is
+# the correct behavior — the updater only needs to be built for
+# toolchains whose final binary is the engine.
+revon_updater_rust_target = ""
+
+if (is_android) {
+  if (target_cpu == "arm") {
+    revon_updater_rust_target = "armv7-linux-androideabi"
+  } else if (target_cpu == "arm64") {
+    revon_updater_rust_target = "aarch64-linux-android"
+  } else if (target_cpu == "x64") {
+    revon_updater_rust_target = "x86_64-linux-android"
+  } else if (target_cpu == "x86") {
+    revon_updater_rust_target = "i686-linux-android"
+  }
+} else if (is_ios) {
+  if (target_cpu == "arm64") {
+    revon_updater_rust_target = "aarch64-apple-ios"
+  } else if (target_cpu == "x64") {
+    revon_updater_rust_target = "x86_64-apple-ios"
+  }
+} else if (is_mac) {
+  if (target_cpu == "arm64") {
+    revon_updater_rust_target = "aarch64-apple-darwin"
+  } else if (target_cpu == "x64") {
+    revon_updater_rust_target = "x86_64-apple-darwin"
+  }
+} else if (is_win) {
+  if (target_cpu == "x64") {
+    revon_updater_rust_target = "x86_64-pc-windows-msvc"
+  }
+} else if (is_linux) {
+  if (target_cpu == "x64") {
+    revon_updater_rust_target = "x86_64-unknown-linux-gnu"
+  }
+}
+
+revon_updater_supported = revon_updater_rust_target != ""
+
+if (revon_updater_supported) {
+  if (is_win) {
+    _updater_lib_name = "updater.lib"
+  } else {
+    _updater_lib_name = "libupdater.a"
+  }
+
+  # Cargo target dir lives inside the GN build output dir, not inside the
+  # source tree. This means:
+  #   - `rm -rf out/<config>` clobbers compiled rust artifacts the same
+  #     way it clobbers compiled C++ artifacts; no special-case cleanup
+  #     in checkout.sh.
+  #   - Each GN config (debug/release/ios/android/etc.) gets its own
+  #     cargo target dir, so they don't step on each other's rlibs.
+  #   - The source checkout stays clean, which is what GN/ninja expects.
+  revon_updater_target_dir = "$root_out_dir/cargo_target"
+  revon_updater_output_lib = "$revon_updater_target_dir/$revon_updater_rust_target/release/$_updater_lib_name"
+
+  # Glob all .rs source files so the input list stays in sync automatically.
+  revon_updater_rs_sources =
+      exec_script("//flutter/shell/common/revon/list_rust_files.py",
+                  [ rebase_path("$revon_updater_dir/library/src",
+                                root_build_dir) ],
+                  "list lines")
+}

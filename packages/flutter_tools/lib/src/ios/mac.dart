@@ -37,7 +37,7 @@ import '../migrations/xcode_script_build_phase_migration.dart';
 import '../migrations/xcode_thin_binary_build_phase_input_paths_migration.dart';
 import '../plugins.dart';
 import '../project.dart';
-import '../shorebird/ios_build_trace_session.dart';
+import '../revon/ios_build_trace_session.dart';
 import 'application_package.dart';
 import 'code_signing.dart';
 import 'migrations/host_app_info_plist_migration.dart';
@@ -353,7 +353,7 @@ Future<XcodeBuildResult> buildXcodeProject({
   // on plugin-heavy apps — otherwise it's an invisible gap between
   // "flutter build ios" starting and the xcode archive span.
   final IosBuildTraceSession? traceSession = IosBuildTraceSession.maybeStart(
-    shorebirdTraceFilePath: buildInfo.shorebirdTraceFilePath,
+    revonTraceFilePath: buildInfo.revonTraceFilePath,
     fileSystem: globals.fs,
     buildDirectoryPath: globals.fs.path.join(getBuildDirectory(), 'ios'),
   );

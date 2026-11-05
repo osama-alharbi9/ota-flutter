@@ -68,7 +68,7 @@ We plan to have four stable releases and 12 beta releases during 2024, similar t
 
 ## Non-goals
 
-We're still not planning on investing in built-in support for [code push or hot updates](https://github.com/flutter/flutter/issues/14330). For code push, our friends at [shorebird.dev](https://shorebird.dev/) may have offerings of interest. For UI push (also known as server-driven UI), we recommend the [rfw](https://pub.dev/packages/rfw) package.
+We're still not planning on investing in built-in support for [code push or hot updates](https://github.com/flutter/flutter/issues/14330). For UI push (also known as server-driven UI), we recommend the [rfw](https://pub.dev/packages/rfw) package.
 
 
 # 2023

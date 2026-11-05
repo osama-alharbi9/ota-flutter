@@ -135,7 +135,7 @@ class AOTSnapshotter {
     // TODO(eseidel): TargetPlatform.darwin doesn't use the linker.
     bool usesLinker = (platform == TargetPlatform.ios || platform == TargetPlatform.darwin);
     final dumpLinkInfoArgs = <String>[
-      // Shorebird dumps the class table information during snapshot compilation which is later used during linking.
+      // Revon dumps the class table information during snapshot compilation which is later used during linking.
       '--print_class_table_link_debug_info_to=${_fileSystem.path.join(outputDir.parent.path, 'App.class_table.json')}',
       '--print_class_table_link_info_to=${_fileSystem.path.join(outputDir.parent.path, 'App.ct.link')}',
       '--print_field_table_link_debug_info_to=${_fileSystem.path.join(outputDir.parent.path, 'App.field_table.json')}',
@@ -145,7 +145,7 @@ class AOTSnapshotter {
     ];
 
     final genSnapshotArgs = <String>[
-      // Shorebird uses --deterministic to improve snapshot stability and increase linking.
+      // Revon uses --deterministic to improve snapshot stability and increase linking.
       '--deterministic',
       // Only save LinkInfo if we're using the linker.
       if (usesLinker) ...dumpLinkInfoArgs,

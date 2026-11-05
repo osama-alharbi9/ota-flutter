@@ -44,7 +44,7 @@ final Platform windowsPlatformWithPublicKey = FakePlatform(
     'PROGRAMFILES(X86)': r'C:\Program Files (x86)\',
     'FLUTTER_ROOT': flutterRoot,
     'USERPROFILE': '/',
-    'SHOREBIRD_PUBLIC_KEY': 'my_public_key',
+    'REVON_PUBLIC_KEY': 'my_public_key',
   },
 );
 final Platform notWindowsPlatform = FakePlatform(
@@ -1224,7 +1224,7 @@ No file or variants found for asset: images/a_dot_burr.jpeg.
   );
 
   testUsingContext(
-    'shorebird.yaml is updated when SHOREBIRD_PUBLIC_KEY env var is set',
+    'revon.yaml is updated when REVON_PUBLIC_KEY env var is set',
     () async {
       final FakeVisualStudio fakeVisualStudio = FakeVisualStudio();
       final BuildWindowsCommand command = BuildWindowsCommand(
@@ -1232,8 +1232,8 @@ No file or variants found for asset: images/a_dot_burr.jpeg.
         operatingSystemUtils: FakeOperatingSystemUtils(),
       )..visualStudioOverride = fakeVisualStudio;
       setUpMockProjectFilesForBuild();
-      final File shorebirdYamlFile =
-          fileSystem.file(r'build\windows\x64\runner\Release\data\flutter_assets\shorebird.yaml')
+      final File revonYamlFile =
+          fileSystem.file(r'build\windows\x64\runner\Release\data\flutter_assets\revon.yaml')
             ..createSync(recursive: true)
             ..writeAsStringSync('app_id: my-app-id');
 
@@ -1246,7 +1246,7 @@ No file or variants found for asset: images/a_dot_burr.jpeg.
         command,
       ).run(const <String>['windows', '--release', '--no-pub']);
 
-      final String updatedYaml = shorebirdYamlFile.readAsStringSync();
+      final String updatedYaml = revonYamlFile.readAsStringSync();
       expect(updatedYaml, contains('app_id: my-app-id'));
       expect(updatedYaml, contains('patch_public_key: my_public_key'));
     },
@@ -1256,10 +1256,10 @@ No file or variants found for asset: images/a_dot_burr.jpeg.
       Platform: () => windowsPlatformWithPublicKey,
       FeatureFlags: () => TestFeatureFlags(isWindowsEnabled: true),
     },
-    // SHOREBIRD_PUBLIC_KEY → shorebird.yaml injection happens inside the
+    // REVON_PUBLIC_KEY → revon.yaml injection happens inside the
     // assets build target, which the mocked FakeProcessManager build
     // commands don't drive. Same situation as the macOS analogue; skip
-    // until we test updateShorebirdYaml directly.
+    // until we test updateRevonYaml directly.
     skip: true,
   );
 }

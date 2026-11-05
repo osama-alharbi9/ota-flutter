@@ -1049,8 +1049,8 @@ class GitTagVersion {
       }
     }
 
-    // Check if running on a Shorebird release branch.
-    final String shorebirdFlutterReleases = git
+    // Check if running on a Revon release branch.
+    final String revonFlutterReleases = git
         .runSync([
           'for-each-ref',
           '--contains',
@@ -1062,13 +1062,13 @@ class GitTagVersion {
         .stdout
         .trim();
     final stableVersionPattern = RegExp(r'^\d+\.\d+\.\d+$');
-    final String? shorebirdFlutterVersion = LineSplitter.split(shorebirdFlutterReleases)
+    final String? revonFlutterVersion = LineSplitter.split(revonFlutterReleases)
         .map((e) => e.replaceFirst('origin/flutter_release/', ''))
         .where((e) => stableVersionPattern.hasMatch(e))
         .toList()
         .firstOrNull;
-    if (shorebirdFlutterVersion != null) {
-      return parse(shorebirdFlutterVersion);
+    if (revonFlutterVersion != null) {
+      return parse(revonFlutterVersion);
     }
 
     // If we don't exist in a tag, use git to find the latest tag.

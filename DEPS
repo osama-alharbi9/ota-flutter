@@ -16,10 +16,12 @@ vars = {
   'skia_git': 'https://skia.googlesource.com',
   'llvm_git': 'https://llvm.googlesource.com',
   'skia_revision': 'a183ded9ad67d998a5b0fe4cd86d3ef5402ffb45',
-  "dart_sdk_revision": "3f8b97e369a83033089608c86c996a3f67897f8c",
-  "dart_sdk_git": "git@github.com:shorebirdtech/dart-sdk.git",
-  "updater_git": "https://github.com/shorebirdtech/updater.git",
-  "updater_rev": "185280e04828e7c828cd6a63a1c53b40b1ee509c",
+  # Revon: stock Dart SDK (the pin the fork already uses for its prebuilt host
+  # SDK) and our updater branch, served from our own git host.
+  "dart_sdk_revision": "c70f78e7d682c158c15ca0c26c729b3ccb932284",
+  "dart_sdk_git": "https://dart.googlesource.com/sdk.git",
+  "revon_git_base": "https://github.com/osama-alharbi9",
+  "updater_rev": "d568d3b44eecb0da76b84dc28c4ead644148fe52",
 
   # WARNING: DO NOT EDIT canvaskit_cipd_instance MANUALLY
   # See `lib/web_ui/README.md` for how to roll CanvasKit to a new version.
@@ -496,7 +498,7 @@ deps = {
    Var('flutter_git') + '/third_party/ocmock' + '@' +  Var('ocmock_rev'),
 
   'engine/src/flutter/third_party/updater':
-   Var('updater_git') + '@' + Var('updater_rev'),
+   Var('revon_git_base') + '/ota-updater.git' + '@' + Var('updater_rev'),
 
   'engine/src/flutter/third_party/libjpeg-turbo/src':
    Var('flutter_git') + '/third_party/libjpeg-turbo' + '@' + '0fb821f3b2e570b2783a94ccd9a2fb1f4916ae9f',

@@ -1,0 +1,15 @@
+name: revon_build_trace
+description: >
+  Chrome Trace Event Format producer used by the build-trace plumbing in
+  flutter_tools and the revon CLI.
+  Not intended for consumption outside of those projects.
+version: 0.1.0
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+dev_dependencies:
+  test: ^1.31.0
+  very_good_analysis: ^10.0.0
